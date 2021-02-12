@@ -1,10 +1,20 @@
-﻿using System.Diagnostics;
+﻿using NUnit.Framework;
+using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace GVFS.FunctionalTests.Tools
 {
     public static class ProcessHelper
     {
+        public static void WritePrefixedOutputLines(string prefix, string outputLines)
+        {
+            foreach (string line in outputLines.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                TestContext.Progress.WriteLine($"{prefix}{line}");
+            }
+        }
+
         public static ProcessResult Run(string fileName, string arguments)
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();

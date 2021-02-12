@@ -112,6 +112,7 @@ namespace GVFS.FunctionalTests.Tools
         }
 
         public static void ValidateGitCommand(
+            string logCommand,
             GVFSFunctionalTestEnlistment enlistment,
             ControlGitRepo controlGitRepo,
             string command,
@@ -128,13 +129,13 @@ namespace GVFS.FunctionalTests.Tools
             ProcessResult expectedResult = GitProcess.InvokeProcess(controlRepoRoot, command, environmentVariables);
             ProcessResult actualResult = GitHelpers.InvokeGitAgainstGVFSRepo(gvfsRepoRoot, command, environmentVariables);
 
-            ErrorsShouldMatch(command, expectedResult, actualResult);
+            ErrorsShouldMatch(logCommand, expectedResult, actualResult);
             actualResult.Output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
-                .ShouldMatchInOrder(expectedResult.Output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries), LinesAreEqual, command + " Output Lines");
+                .ShouldMatchInOrder(expectedResult.Output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries), LinesAreEqual, logCommand + " Output Lines");
 
             if (command != "status")
             {
-                ValidateGitCommand(enlistment, controlGitRepo, "status");
+                ValidateGitCommand(command + "-status", enlistment, controlGitRepo, "status");
             }
         }
 

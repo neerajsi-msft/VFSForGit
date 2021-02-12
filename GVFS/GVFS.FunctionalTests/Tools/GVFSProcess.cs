@@ -1,4 +1,5 @@
 ﻿using GVFS.Tests.Should;
+using NUnit.Framework;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -259,11 +260,17 @@ namespace GVFS.FunctionalTests.Tools
                 processInfo.RedirectStandardInput = true;
             }
 
+            if (processInfo.WorkingDirectory != null)
+            {
+                TestContext.Progress.WriteLine($"WorkingDir: cd {processInfo.WorkingDirectory}");
+            }
+
             if (trace != null)
             {
                 processInfo.EnvironmentVariables["GIT_TRACE"] = trace;
             }
 
+            TestContext.Progress.WriteLine($"Invoking: {processInfo.FileName} {processInfo.Arguments}");
             using (Process process = Process.Start(processInfo))
             {
                 if (standardInput != null)
@@ -284,6 +291,7 @@ namespace GVFS.FunctionalTests.Tools
                     process.ExitCode.ShouldNotEqual(SuccessExitCode, "Exit code should not be zero");
                 }
 
+                ProcessHelper.WritePrefixedOutputLines("stdout> ", result);
                 return result;
             }
         }

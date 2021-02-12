@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -25,17 +27,27 @@ namespace GVFS.FunctionalTests.Tools
                 processInfo.RedirectStandardInput = true;
             }
 
+            if (processInfo.WorkingDirectory != null)
+            {
+                TestContext.Progress.WriteLine($"WorkingDir: cd {processInfo.WorkingDirectory}");
+            }
+
             processInfo.EnvironmentVariables["GIT_TERMINAL_PROMPT"] = "0";
 
             if (environmentVariables != null)
             {
                 foreach (string key in environmentVariables.Keys)
                 {
+                    TestContext.Progress.WriteLine($"Env: set {key}={environmentVariables[key]}");
                     processInfo.EnvironmentVariables[key] = environmentVariables[key];
                 }
             }
 
-            return ProcessHelper.Run(processInfo, inputStream: inputStream);
+            TestContext.Progress.WriteLine($"Invoking: {processInfo.FileName} {processInfo.Arguments}");
+            ProcessResult result = ProcessHelper.Run(processInfo, inputStream: inputStream);
+            ProcessHelper.WritePrefixedOutputLines("stdout> ", result.Output);
+            ProcessHelper.WritePrefixedOutputLines("stderr> ", result.Errors);
+            return result;
         }
     }
 }

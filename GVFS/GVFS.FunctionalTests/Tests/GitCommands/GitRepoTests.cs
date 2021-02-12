@@ -256,13 +256,14 @@ namespace GVFS.FunctionalTests.Tests.GitCommands
 
             if (command != "status" && checkStatus)
             {
-                this.ValidateGitCommand("status");
+                GitHelpers.ValidateGitCommand(command + "-status", this.Enlistment, this.ControlGitRepo, "status");
             }
         }
 
         protected void ValidateGitCommand(string command, params object[] args)
         {
             GitHelpers.ValidateGitCommand(
+                command,
                 this.Enlistment,
                 this.ControlGitRepo,
                 command,

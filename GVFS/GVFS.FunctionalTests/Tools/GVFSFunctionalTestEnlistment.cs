@@ -167,7 +167,6 @@ namespace GVFS.FunctionalTests.Tools
 
         public void DeleteEnlistment()
         {
-            TestResultsHelper.OutputGVFSLogs(this);
             RepositoryHelpers.DeleteTestDirectory(this.EnlistmentRoot);
         }
 
