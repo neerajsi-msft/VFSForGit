@@ -9,7 +9,7 @@ IF "%2"=="" (SET "GVFSVersion=0.2.173.2") ELSE (SET "GVFSVersion=%2")
 SET SolutionConfiguration=%Configuration%.Windows
 
 FOR /F "tokens=* USEBACKQ" %%F IN (`where nuget.exe`) DO (
-	SET nuget=%%F
+	SET nuget="%%F"
 	ECHO Found nuget.exe at '%%F'
 )
 
@@ -33,6 +33,10 @@ IF NOT EXIST "c:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0" (
 :: See https://github.com/Microsoft/vswhere/wiki/Find-MSBuild
 for /f "usebackq tokens=*" %%i in (`%vswhere% -all -prerelease -latest -products * -requires Microsoft.Component.MSBuild Microsoft.VisualStudio.Workload.ManagedDesktop Microsoft.VisualStudio.Workload.NativeDesktop Microsoft.Net.Core.Component.SDK.2.1 -find MSBuild\**\Bin\amd64\MSBuild.exe`) do (
  set msbuild="%%i"
+)
+
+if NOT DEFINED msbuild (
+	set msbuild="C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe"
 )
 
 IF NOT DEFINED msbuild (

@@ -8,7 +8,7 @@ IF "%1"=="" (SET "Configuration=Debug") ELSE (SET "Configuration=%1")
 SET SolutionConfiguration=%Configuration%.Windows
 
 FOR /F "tokens=* USEBACKQ" %%F IN (`where nuget.exe`) DO (
-	SET nuget=%%F
+	SET nuget="%%F"
 	ECHO Found nuget.exe at '%%F'
 )
 
